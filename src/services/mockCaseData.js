@@ -23,7 +23,7 @@ export const mockUsers = [
   {
     id: 'demo.investigator',
     password: 'Demo@12345',
-    name: 'Pranshu Kumar',
+    name: 'Pranshu Jain',
     role: 'Investigation Officer',
     functionalRole: FUNCTIONAL_ROLES.INVESTIGATION_OFFICER,
     rank: RANKS.SI,
@@ -31,7 +31,7 @@ export const mockUsers = [
     department: 'Cyber & Legal Investigations',
     policeStation: 'Cyber Cell Division',
     jurisdiction: 'Delhi',
-    initials: 'PK',
+    initials: 'PJ',
     enrolledBiometrics: true,
     permissions: [
       PERMISSIONS.VIEW_ASSIGNED_CASES,
@@ -49,9 +49,9 @@ export const mockUsers = [
     ],
   },
   {
-    id: 'pranshu.kumar',
+    id: 'pranshu.jain',
     password: 'Pranshu@123',
-    name: 'Pranshu Kumar',
+    name: 'Pranshu Jain',
     role: 'Investigation Officer',
     functionalRole: FUNCTIONAL_ROLES.INVESTIGATION_OFFICER,
     rank: RANKS.SI,
@@ -59,7 +59,7 @@ export const mockUsers = [
     department: 'Cyber & Legal Investigations',
     policeStation: 'Cyber Cell Division',
     jurisdiction: 'Delhi',
-    initials: 'PK',
+    initials: 'PJ',
     enrolledBiometrics: true,
     permissions: [
       PERMISSIONS.VIEW_ASSIGNED_CASES,

@@ -9,10 +9,6 @@ import {
   Users, X, CheckCircle2, AlertCircle, Clock3, ExternalLink, KeyRound, LogOut
 } from 'lucide-react'
 import './styles.css'
-<<<<<<< HEAD
-import justiceImage from './assets/justice-panel.png'
-import { documents, cases, auditLogs, users, activities } from './services/mockData'
-=======
 import { documents, cases, auditLogs, users, activities } from './services/mockData'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import { LoginPage } from './components/auth/LoginPage'
@@ -20,7 +16,6 @@ import { CasesPage as Phase2CasesPage } from './components/cases/CasesPage'
 import { CreateCasePage } from './components/cases/CreateCasePage'
 import { CaseDetailPage } from './components/cases/CaseDetailPage'
 import { hasPermission, PERMISSIONS, canCreateCase, getActionTier, ACTION_TIERS } from './services/accessControl'
->>>>>>> b7c8c13 (feat: revamp login flow and add demo signup verification)
 
 const nav = [
   ['Dashboard', Grid2X2], ['Documents', FileText], ['Upload', Upload], ['Search', Search],
@@ -36,56 +31,44 @@ function Toast({ toast, clear }) { return <AnimatePresence>{toast && <motion.div
 
 function ConfirmDialog({ open, onClose, onConfirm, documentName }) { return <AnimatePresence>{open && <motion.div className="modal-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><motion.div className="modal" initial={{ scale: .97, y: 10 }} animate={{ scale: 1, y: 0 }} exit={{ scale: .97, y: 10 }} role="dialog" aria-modal="true" aria-labelledby="confirm-title"><div className="modal-icon warning"><AlertCircle /></div><h2 id="confirm-title">Delete document?</h2><p><strong>{documentName}</strong> will be permanently removed from the workspace. This cannot be undone.</p><div className="modal-actions"><Button variant="secondary" onClick={onClose}>Cancel</Button><Button variant="danger" onClick={onConfirm}>Delete document</Button></div></motion.div></motion.div>}</AnimatePresence> }
 
-<<<<<<< HEAD
-function Sidebar({ active, setActive, open, setOpen }) { return <aside className={`sidebar ${open ? 'open' : ''}`}><div className="brand"><span className="brand-mark"><ShieldCheck /></span><div><b>DocGuard</b><small>Secure · Legal · Trusted</small></div></div><nav>{nav.map(([name, Icon]) => <button key={name} className={`nav-item ${active === name ? 'active' : ''}`} onClick={() => { setActive(name); setOpen(false) }}><Icon size={20}/><span>{name}</span></button>)}</nav><div className="sidebar-footer"><div></div><em>Justice backed<br/>by integrity.</em></div></aside> }
+function Sidebar({ active, setActive, open, setOpen, onSelectNav }) { return <aside className={`sidebar ${open ? 'open' : ''}`}><button className="brand" type="button" aria-label="Go to dashboard home" onClick={() => { onSelectNav ? onSelectNav('Dashboard') : setActive('Dashboard'); setOpen(false) }}><span className="brand-mark"><ShieldCheck /></span><div><b>DocGuard</b><small>Secure · Legal · Trusted</small></div></button><nav>{nav.map(([name, Icon]) => <button key={name} className={`nav-item ${active === name ? 'active' : ''}`} onClick={() => { onSelectNav ? onSelectNav(name) : setActive(name); setOpen(false) }}><Icon size={20}/><span>{name}</span></button>)}</nav><div className="sidebar-footer"><div></div><em>Justice backed<br/>by integrity.</em></div></aside> }
 
-function Header({ menu, setMenu, setActive }) { const [profileOpen, setProfileOpen] = useState(false); const searchRef = useRef(); useEffect(() => { const shortcut = e => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); searchRef.current?.focus() } }; window.addEventListener('keydown', shortcut); return () => window.removeEventListener('keydown', shortcut) }, []); return <header className="topbar"><IconButton label="Open navigation" className="mobile-menu" onClick={menu}><Menu/></IconButton><label className="global-search"><Search size={19}/><input ref={searchRef} placeholder="Search documents, cases, or keywords..." onKeyDown={e => e.key === 'Enter' && setActive('Search')}/><kbd>Ctrl&nbsp; K</kbd></label><div className="header-actions"><IconButton label="Notifications" className="notification"><Bell size={21}/><i/></IconButton><div className="profile-wrap"><button className="profile" onClick={() => setProfileOpen(!profileOpen)} aria-expanded={profileOpen}><span className="avatar">PK</span><span className="profile-copy"><b>Pranshu Kumar</b><small>Investigation Officer</small></span><ChevronDown size={16}/></button>{profileOpen && <div className="profile-menu"><button><UserPlus size={16}/> View profile</button><button><Settings size={16}/> Preferences</button><button><LogOut size={16}/> Sign out</button></div>}</div></div></header> }
-=======
-function Sidebar({ active, setActive, open, setOpen, onSelectNav }) { return <aside className={`sidebar ${open ? 'open' : ''}`}><div className="brand"><span className="brand-mark"><ShieldCheck /></span><div><b>DocGuard</b><small>Secure · Legal · Trusted</small></div></div><nav>{nav.map(([name, Icon]) => <button key={name} className={`nav-item ${active === name ? 'active' : ''}`} onClick={() => { onSelectNav ? onSelectNav(name) : setActive(name); setOpen(false) }}><Icon size={20}/><span>{name}</span></button>)}</nav><div className="sidebar-footer"><div></div><em>Justice backed<br/>by integrity.</em></div></aside> }
+function Header({ menu, setMenu, setActive, user, onSignOut }) {
+  const [profileOpen, setProfileOpen] = useState(false)
+  const [notificationOpen, setNotificationOpen] = useState(false)
+  const [allNotificationsOpen, setAllNotificationsOpen] = useState(false)
+  const searchRef = useRef()
+  const notifications = [
+    { title: 'Case 2026-014 updated', text: 'New witness statement was added by SI Sharma.', time: '2 min ago', tone: 'blue' },
+    { title: 'Document integrity verified', text: 'Evidence bundle #7 passed SHA-256 validation.', time: '18 min ago', tone: 'green' },
+    { title: 'Access review required', text: 'Two officers need supervision approval today.', time: '1 hour ago', tone: 'orange' },
+    { title: 'Evidence package shared', text: 'Forensic review access was granted for Case #2025_18.', time: '3 hours ago', tone: 'blue' },
+    { title: 'Secure backup completed', text: 'The latest investigation records were backed up successfully.', time: 'Yesterday', tone: 'green' },
+  ]
 
-function Header({ menu, setMenu, setActive, user, onSignOut }) { const [profileOpen, setProfileOpen] = useState(false); const searchRef = useRef(); useEffect(() => { const shortcut = e => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); searchRef.current?.focus() } }; window.addEventListener('keydown', shortcut); return () => window.removeEventListener('keydown', shortcut) }, []); const userName = user?.name || 'Pranshu Kumar'; const userRole = user?.rank || user?.role || 'Investigation Officer'; const userInitials = user?.initials || userName.split(' ').map(x => x[0]).join('').slice(0, 2); return <header className="topbar"><IconButton label="Open navigation" className="mobile-menu" onClick={menu}><Menu/></IconButton><label className="global-search"><Search size={19}/><input ref={searchRef} placeholder="Search documents, cases, or keywords..." onKeyDown={e => e.key === 'Enter' && setActive('Search')}/><kbd>Ctrl&nbsp; K</kbd></label><div className="header-actions"><IconButton label="Notifications" className="notification"><Bell size={21}/><i/></IconButton><div className="profile-wrap"><button className="profile" onClick={() => setProfileOpen(!profileOpen)} aria-expanded={profileOpen}><span className="avatar">{userInitials}</span><span className="profile-copy"><b>{userName}</b><small>{userRole}</small></span><ChevronDown size={16}/></button>{profileOpen && <div className="profile-menu"><button onClick={() => { setProfileOpen(false); setActive('Settings'); }}><UserPlus size={16}/> View profile</button><button onClick={() => { setProfileOpen(false); setActive('Settings'); }}><Settings size={16}/> Preferences</button><button onClick={() => { setProfileOpen(false); onSignOut?.(); }}><LogOut size={16}/> Sign out</button></div>}</div></div></header> }
->>>>>>> b7c8c13 (feat: revamp login flow and add demo signup verification)
+  useEffect(() => { const shortcut = e => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); searchRef.current?.focus() } }; window.addEventListener('keydown', shortcut); return () => window.removeEventListener('keydown', shortcut) }, [])
+
+  const userName = user?.name || 'Pranshu Jain'
+  const userRole = user?.rank || user?.role || 'Investigation Officer'
+  const userInitials = user?.initials || userName.split(' ').map(x => x[0]).join('').slice(0, 2)
+
+  return <header className="topbar"><IconButton label="Open navigation" className="mobile-menu" onClick={menu}><Menu/></IconButton><label className="global-search"><Search size={19}/><input ref={searchRef} placeholder="Search documents, cases, or keywords..." onKeyDown={e => e.key === 'Enter' && setActive('Search')}/><kbd>Ctrl&nbsp; K</kbd></label><div className="header-actions"><div className="notification-wrap"><IconButton label="Notifications" className="notification" onClick={() => { setNotificationOpen(!notificationOpen); setProfileOpen(false) }}><Bell size={21}/><i/></IconButton>{notificationOpen && <div className="notification-panel"><div className="notification-header"><strong>Notifications</strong><button onClick={() => { setNotificationOpen(false); setAllNotificationsOpen(true) }}>View all</button></div>{notifications.slice(0, 3).map(item => <button key={item.title} className="notification-item" type="button" onClick={() => setNotificationOpen(false)}><span className={`notification-dot ${item.tone}`}/><div><b>{item.title}</b><small>{item.text}</small><em>{item.time}</em></div></button> )}</div>}</div><div className="profile-wrap"><button className="profile" onClick={() => { setProfileOpen(!profileOpen); setNotificationOpen(false) }} aria-expanded={profileOpen}><span className="avatar">{userInitials}</span><span className="profile-copy"><b>{userName}</b><small>{userRole}</small></span><ChevronDown size={16}/></button>{profileOpen && <div className="profile-menu"><button onClick={() => { setProfileOpen(false); setActive('Settings'); }}><UserPlus size={16}/> View profile</button><button onClick={() => { setProfileOpen(false); setActive('Settings'); }}><Settings size={16}/> Preferences</button><button onClick={() => { setProfileOpen(false); onSignOut?.(); }}><LogOut size={16}/> Sign out</button></div>}</div></div>{allNotificationsOpen && <><button className="notification-modal-backdrop" aria-label="Close all notifications" onClick={() => setAllNotificationsOpen(false)}/><section className="all-notifications-modal" role="dialog" aria-modal="true" aria-labelledby="all-notifications-title"><div className="all-notifications-heading"><div><p>SECURE WORKSPACE</p><h2 id="all-notifications-title">All notifications</h2></div><IconButton label="Close notifications" onClick={() => setAllNotificationsOpen(false)}><X size={18}/></IconButton></div><div className="all-notifications-list">{notifications.map(item => <button key={item.title} className="notification-item" type="button" onClick={() => setAllNotificationsOpen(false)}><span className={`notification-dot ${item.tone}`}/><div><b>{item.title}</b><small>{item.text}</small><em>{item.time}</em></div></button>)}</div></section></>}</header> }
 
 function StatCard({ icon: Icon, tone, value, label }) { return <motion.article className="stat-card" whileHover={{ y: -3, boxShadow: '0 14px 30px rgba(26, 47, 78, .10)' }}><span className={`round-icon ${tone}`}><Icon size={25}/></span><ChevronRight className="stat-chevron" size={18}/><strong>{value}</strong><p>{label}</p></motion.article> }
 
 function UploadDropzone({ notify }) { const [status, setStatus] = useState('idle'); const [progress, setProgress] = useState(0); const upload = (file) => { if (!file) return; if (file.size > 50 * 1024 * 1024) { setStatus('error'); notify('error', 'Upload could not start', 'The selected file exceeds the 50MB limit.'); return } setStatus('uploading'); setProgress(12); let value = 12; const timer = setInterval(() => { value += 22; setProgress(Math.min(value, 100)); if (value >= 100) { clearInterval(timer); setStatus('success'); notify('success', 'Document uploaded', `${file.name} is now ready for secure review.`) } }, 260) }
 return <section className={`upload-card ${status}`} onDragOver={e => e.preventDefault()} onDrop={e => { e.preventDefault(); upload(e.dataTransfer.files[0]) }}><input id="file-input" type="file" hidden onChange={e => upload(e.target.files[0])}/>{status === 'success' ? <><CheckCircle2 className="upload-main-icon"/><h2>Upload complete</h2><p>Your document was added to the secure workspace.</p><Button variant="secondary" onClick={() => setStatus('idle')}>Upload another</Button></> : <><CloudUpload className="upload-main-icon"/><h2>{status === 'error' ? 'Try another file' : 'Upload a Document'}</h2><p>Drag and drop files here, or click to browse</p>{status === 'uploading' ? <div className="progress"><span style={{ width: `${progress}%` }}/><small>Encrypting file · {progress}%</small></div> : <label className="button primary" htmlFor="file-input">Choose Files</label>}<small>Supported formats: PDF, DOC, DOCX, JPG, PNG (Max 50MB)</small></>}</section> }
 
-<<<<<<< HEAD
-function JusticePanel() { return <section className="justice-panel" style={{ backgroundImage: `linear-gradient(90deg, rgba(9,25,44,.92) 0%, rgba(9,25,44,.73) 47%, rgba(9,25,44,.08) 100%), url(${justiceImage})` }}><div><h2>Documents<br/>Build Truth.</h2><span></span><p>A secure system for a more transparent tomorrow.</p></div></section> }
-
 function ActivityCard() { const iconMap = { upload: Upload, share: Share2, view: Eye, edit: FileText, user: Users }; return <section className="panel activity-card"><div className="panel-heading"><h2>Recent Activity</h2><button>View all</button></div><div className="activity-list">{activities.map(item => { const Icon = iconMap[item.icon]; return <div className="activity" key={item.title}><span className={`round-icon small ${item.tone}`}><Icon size={17}/></span><div><b>{item.title}</b><small>{item.time}</small></div></div> })}</div></section> }
 
-function QuickActions({ setActive }) { const quick = [[Upload, 'Upload Document', 'Upload'], [FolderKanban, 'Create New Case', 'Cases'], [Search, 'Search Documents', 'Search'], [Share2, 'Share a File', 'Shared with Me']]; return <section className="panel quick-actions"><h2>Quick Actions</h2>{quick.map(([Icon, label, dest]) => <button key={label} onClick={() => setActive(dest)}><Icon size={18}/><span>{label}</span><ChevronRight size={16}/></button>)}</section> }
-
-=======
-function ActivityCard() { const iconMap = { upload: Upload, share: Share2, view: Eye, edit: FileText, user: Users }; return <section className="panel activity-card"><div className="panel-heading"><h2>Recent Activity</h2><button>View all</button></div><div className="activity-list">{activities.map(item => { const Icon = iconMap[item.icon]; return <div className="activity" key={item.title}><span className={`round-icon small ${item.tone}`}><Icon size={17}/></span><div><b>{item.title}</b><small>{item.time}</small></div></div> })}</div></section> }
-
->>>>>>> b7c8c13 (feat: revamp login flow and add demo signup verification)
 function SecurityCard() { return <section className="security-card"><span className="round-icon green"><ShieldCheck size={27}/></span><div><b>Your Data is Protected</b><p>End-to-end encryption<br/>Blockchain verified logs<br/>Access controlled & monitored</p></div><ChevronRight size={17}/></section> }
 
 function RowMenu({ doc, onDelete, notify, onView }) { const [open, setOpen] = useState(false); return <div className="row-menu"><IconButton label={`Actions for ${doc.name}`} onClick={() => setOpen(!open)}><MoreHorizontal size={19}/></IconButton>{open && <div className="dropdown"><button onClick={() => { onView?.(doc); notify('success', 'Document opened', `${doc.name} opened in secure preview.`) }}><Eye/> View</button><button onClick={() => notify('success', 'Download prepared', 'A secure download is being prepared.')}><Download/> Download</button><button onClick={() => notify('success', 'Sharing enabled', 'A secure sharing link has been created.')}><Share2/> Share</button><button onClick={() => notify('success', 'Integrity verified', 'The file hash matches its audit record.')}><ShieldCheck/> Verify Integrity</button><button className="danger-text" onClick={() => onDelete(doc)}><Trash2/> Delete</button></div>}</div> }
 
 function DocumentTable({ docs = documents, onDelete, notify, onView, title = 'Recent Documents', showViewAll = true }) { return <section className="panel documents-panel"><div className="panel-heading"><h2>{title}</h2>{showViewAll && <button>View all</button>}</div><div className="table-wrap"><table><thead><tr><th>Name</th><th>Case</th><th>Type</th><th>Uploaded On</th><th className="actions-head">Actions</th></tr></thead><tbody>{docs.map(doc => <tr key={doc.id}><td><span className="file-name">{doc.type === 'PDF' ? <FileText/> : doc.type === 'Image' ? <FileImage/> : doc.type === 'Video' ? <FileVideo/> : <File/>}{doc.name}</span></td><td className="muted">{doc.case}</td><td><TypeBadge type={doc.type}/></td><td className="muted">{doc.uploaded}</td><td><RowMenu doc={doc} onDelete={onDelete} notify={notify} onView={onView}/></td></tr>)}</tbody></table></div></section> }
 
-<<<<<<< HEAD
-function Dashboard({ setActive, notify, onDelete }) { return <div className="page dashboard-page"><section className="hero"><div><h1>Welcome back, Pranshu</h1><p>Manage, access, and secure your legal and investigation documents — all in one place.</p></div><em>“Secure records. Stronger justice.”</em></section><div className="dashboard-grid"><main><section className="stats-grid"><StatCard icon={FileText} tone="blue" value="128" label="Total Documents"/><StatCard icon={FolderKanban} tone="green" value="24" label="Active Cases"/><StatCard icon={Users} tone="purple" value="8" label="Shared with You"/><StatCard icon={ShieldCheck} tone="orange" value="100%" label="Secure & Encrypted"/></section><section className="upload-grid"><UploadDropzone notify={notify}/><JusticePanel/></section><DocumentTable onDelete={onDelete} notify={notify} onView={() => setActive('Document Detail')}/></main><aside className="dashboard-side"><ActivityCard/><QuickActions setActive={setActive}/><SecurityCard/></aside></div></div> }
-
-function PageHeader({ title, text, action, children }) { return <><section className="page-title"><div><p className="eyebrow">SECURE WORKSPACE</p><h1>{title}</h1><span>{text}</span></div>{action}</section>{children}</> }
-
-function DocumentsPage({ notify, onDelete, setActive }) { return <div className="page"><PageHeader title="Documents" text="Organize and protect every file in your investigation." action={<Button onClick={() => setActive('Upload')}><Upload size={17}/> Upload document</Button>}/><section className="filter-bar"><label><Search size={18}/><input placeholder="Search documents"/></label><button><Filter size={17}/> All types <ChevronDown size={15}/></button><button><SlidersHorizontal size={17}/> More filters</button></section><DocumentTable title="All Documents" showViewAll={false} docs={[...documents, { id: 6, name: 'Chain_of_Custody.pdf', case: 'Case #2025_15', type: 'PDF', uploaded: '06 Sep 2026' }]} notify={notify} onDelete={onDelete} onView={() => setActive('Document Detail')}/></div> }
-
-function DocumentDetail({ notify, setActive }) { const doc = documents[0]; const details = [['File type', 'PDF document'], ['Uploaded on', '12 Sep 2026, 10:24 AM'], ['Case association', 'Case #2025_18'], ['Document owner', 'Pranshu Kumar'], ['Current status', 'Active'], ['Access permissions', 'Investigation team · 5 members']]; return <div className="page"><button className="back-button" onClick={() => setActive('Documents')}><ChevronLeft size={16}/> Back to documents</button><PageHeader title={doc.name} text="Secure document record and integrity information." action={<div className="action-row"><Button variant="secondary"><Download size={17}/> Download</Button><Button><Share2 size={17}/> Share</Button></div>}/><div className="details-layout"><section className="panel detail-card"><div className="file-preview"><FileText size={48}/><span>PDF</span></div><div className="detail-list">{details.map(([label, value]) => <div key={label}><span>{label}</span><b>{value}</b></div>)}</div></section><section className="verification"><div className="verify-header"><span><ShieldCheck/></span><div><p>DOCUMENT INTEGRITY</p><h2>Integrity Verified</h2><small>Hash matches the trusted audit record.</small></div></div><div className="verify-grid"><div><small>SHA-256 hash</small><code>8c4f17d7...a12e9f51</code><button onClick={() => { navigator.clipboard?.writeText('8c4f17d7a12e9f51'); notify('success','Hash copied','The SHA-256 hash was copied to your clipboard.') }}><Copy size={14}/> Copy hash</button></div><div><small>Verification timestamp</small><b>12 Sep 2026, 10:25 AM</b></div><div><small>Blockchain reference ID</small><b>0x7D9A...4C2E</b></div><div><small>Audit status</small><b className="verified"><CheckCircle2 size={16}/> Complete</b></div></div></section></div><section className="panel audit-mini"><div className="panel-heading"><h2>Access & audit activity</h2><button>View full audit log</button></div>{auditLogs.slice(0,3).map(log => <div className="audit-line" key={log.id}><span className="round-icon small blue"><Activity size={15}/></span><b>{log.user}</b><span>{log.action} <strong>{log.subject}</strong></span><small>{log.time}</small></div>)}</section></div> }
-
-function UploadPage({ notify }) { return <div className="page narrow-page"><PageHeader title="Upload document" text="Add a file to a case with secure, auditable handling."/><UploadDropzone notify={notify}/><section className="panel upload-notes"><ShieldCheck/><div><h3>Secure upload handling</h3><p>Uploads are shown as a frontend demonstration. A production workflow would request upload URLs and integrity verification from the backend.</p></div></section></div> }
-
-function CasesPage() { const [filter, setFilter] = useState('Active'); const filtered = cases.filter(c => filter === 'All' || (filter === 'High Priority' ? c.priority === 'High' : c.status === filter)); return <div className="page"><PageHeader title="Cases" text="Track investigations, documents, and responsible teams." action={<Button><Plus size={17}/> Create case</Button>}/><div className="filter-chips">{['All','Active','Closed','High Priority','My Cases'].map(f => <button onClick={() => setFilter(f)} className={filter === f ? 'selected' : ''} key={f}>{f}</button>)}</div><div className="case-grid">{filtered.map(c => <motion.article className="case-card" whileHover={{ y: -3 }} key={c.id}><div className="case-top"><span className={`priority ${c.priority.toLowerCase()}`}>{c.priority} priority</span><MoreHorizontal size={18}/></div><p>{c.id}</p><h2>{c.title}</h2><span className={`status ${c.status.toLowerCase()}`}>{c.status}</span><div className="case-metrics"><span><FileText/> {c.documents} documents</span><span><Clock3/> {c.updated}</span></div><div className="case-person"><span className="avatar small-avatar">{c.investigator.split(' ').map(x=>x[0]).join('')}</span><div><small>Assigned investigator</small><b>{c.investigator}</b></div></div></motion.article>)}</div></div> }
-
-function AuditPage() { return <div className="page"><PageHeader title="Audit Log" text="An immutable-style activity record for document and case operations."/><section className="filter-bar"><label><Search size={18}/><input placeholder="Search audit activity"/></label><button><Filter size={17}/> All activity</button><button>Last 30 days <ChevronDown size={15}/></button></section><section className="panel documents-panel"><div className="table-wrap"><table><thead><tr><th>User</th><th>Action</th><th>Document / Case</th><th>Timestamp</th><th>IP / Device</th><th>Result</th></tr></thead><tbody>{auditLogs.map(log => <tr key={log.id}><td><b>{log.user}</b></td><td>{log.action}</td><td className="muted">{log.subject}</td><td className="muted">{log.time}</td><td className="muted">{log.device}</td><td><span className="result"><CheckCircle2/> {log.result}</span></td></tr>)}</tbody></table></div></section></div> }
-=======
 function Dashboard({ setActive, notify, onDelete, user, onCreateCase }) {
   const firstName = user?.name?.split(' ')[0] || 'Pranshu'
-  const canUpload = hasPermission(user, PERMISSIONS.UPLOAD_DOCUMENTS)
 
   return (
     <div className="page dashboard-page">
@@ -103,21 +86,6 @@ function Dashboard({ setActive, notify, onDelete, user, onCreateCase }) {
             <StatCard icon={FolderKanban} tone="green" value="24" label="Active Cases"/>
             <StatCard icon={Users} tone="purple" value="8" label="Shared with You"/>
             <StatCard icon={ShieldCheck} tone="orange" value="100%" label="Secure & Encrypted"/>
-          </section>
-
-          <section className="upload-grid">
-            {canUpload ? (
-              <UploadDropzone notify={notify}/>
-            ) : (
-              <section className="upload-card idle" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '24px 20px' }}>
-                <ShieldCheck className="upload-main-icon" style={{ color: '#2563eb' }} />
-                <h2 style={{ fontSize: 17, margin: '8px 0 4px' }}>Investigation Record Access</h2>
-                <p style={{ maxWidth: 380, margin: '4px 0 14px', fontSize: 12, color: '#5c6d8b', lineHeight: 1.4 }}>
-                  Your official rank (<strong>{user?.rank}</strong>) operates under <strong>Investigation Record</strong> permissions. Record entry & upload functions are managed by lead investigators.
-                </p>
-                <Button variant="secondary" onClick={() => setActive('Cases')}>View Authorized Cases</Button>
-              </section>
-            )}
           </section>
 
           <DocumentTable onDelete={onDelete} notify={notify} onView={() => setActive('Document Detail')}/>
@@ -165,8 +133,8 @@ function DocumentDetail({ notify, setActive }) {
   const doc = documents[0];
   const fullHash = '8f91a7c2e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7';
   const versions = [
-    { ver: 'V2 (Current)', by: 'Pranshu Kumar', date: '12 Sep 2026, 10:24 AM', reason: 'Updated investigation annexure and witness details', hash: fullHash },
-    { ver: 'V1', by: 'Pranshu Kumar', date: '10 Sep 2026, 09:15 AM', reason: 'Initial document upload', hash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' },
+    { ver: 'V2 (Current)', by: 'Pranshu Jain', date: '12 Sep 2026, 10:24 AM', reason: 'Updated investigation annexure and witness details', hash: fullHash },
+    { ver: 'V1', by: 'Pranshu Jain', date: '10 Sep 2026, 09:15 AM', reason: 'Initial document upload', hash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' },
   ];
   const details = [
     ['File name', doc.name],
@@ -174,7 +142,7 @@ function DocumentDetail({ notify, setActive }) {
     ['Current version', 'V2 (Current)'],
     ['Uploaded on', '12 Sep 2026, 10:24 AM'],
     ['Case association', 'Case #2026-001'],
-    ['Document owner', 'Pranshu Kumar'],
+    ['Document owner', 'Pranshu Jain'],
     ['Current status', 'Active'],
     ['Access permissions', 'Investigation team · 5 members']
   ];
@@ -438,7 +406,6 @@ function AuditPage() {
     </div>
   )
 }
->>>>>>> b7c8c13 (feat: revamp login flow and add demo signup verification)
 
 function SearchPage({ notify, onDelete, setActive }) { const [query, setQuery] = useState(''); const results = useMemo(() => documents.filter(d => d.name.toLowerCase().includes(query.toLowerCase()) || d.case.toLowerCase().includes(query.toLowerCase())), [query]); return <div className="page"><PageHeader title="Advanced Search" text="Find records by metadata, case context, ownership, and verification status."/><section className="search-form"><label><span>Keyword</span><div><Search size={18}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Document name or keyword"/></div></label>{['Document type','Case','Owner','Date range','Verification status','User'].map(item => <label key={item}><span>{item}</span><button>{item === 'Date range' ? 'Any time' : `All ${item.toLowerCase()}s`}<ChevronDown size={15}/></button></label>)}<Button><Search size={17}/> Search records</Button></section><div className="filter-chips applied"><span>Active filters:</span><button>Integrity verified <X size={14}/></button><button>Last 90 days <X size={14}/></button></div><DocumentTable title={`${results.length} Results`} showViewAll={false} docs={results} notify={notify} onDelete={onDelete} onView={() => setActive('Document Detail')}/></div> }
 
@@ -450,9 +417,6 @@ function PlaceholderPage({ title }) { return <div className="page narrow-page"><
 
 function Skeleton() { return <div className="page"><div className="skeleton hero-skeleton"/><div className="skeleton-grid">{[1,2,3,4].map(x=><div className="skeleton" key={x}/>)}</div><div className="skeleton large"/></div> }
 
-<<<<<<< HEAD
-function App() { const [active, setActive] = useState('Dashboard'); const [menu, setMenu] = useState(false); const [toast, setToast] = useState(null); const [confirm, setConfirm] = useState(null); const [loading, setLoading] = useState(true); const notify = (type, title, text) => { setToast({ type, title, text }); setTimeout(() => setToast(null), 4200) }; useEffect(() => { const t = setTimeout(() => setLoading(false), 460); return () => clearTimeout(t) }, []); const deleteDoc = doc => setConfirm(doc); const confirmDelete = () => { notify('success', 'Document deleted', `${confirm.name} has been removed from this demonstration list.`); setConfirm(null) }; const pages = { Dashboard: <Dashboard setActive={setActive} notify={notify} onDelete={deleteDoc}/>, Documents: <DocumentsPage notify={notify} onDelete={deleteDoc} setActive={setActive}/>, Upload: <UploadPage notify={notify}/>, Search: <SearchPage notify={notify} onDelete={deleteDoc} setActive={setActive}/>, Cases: <CasesPage/>, 'Shared with Me': <PlaceholderPage title="Shared with Me"/>, 'Audit Log': <AuditPage/>, Users: <UsersPage notify={notify}/>, Settings: <SettingsPage notify={notify}/>, 'Document Detail': <DocumentDetail notify={notify} setActive={setActive}/> }; return <div className="app-shell"><Sidebar active={active} setActive={setActive} open={menu} setOpen={setMenu}/>{menu && <button className="sidebar-scrim" aria-label="Close navigation" onClick={() => setMenu(false)}/>}<div className="content"><Header menu={() => setMenu(true)} setActive={setActive}/><AnimatePresence mode="wait"><motion.div key={active} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: .22 }}>{loading ? <Skeleton/> : pages[active]}</motion.div></AnimatePresence></div><Toast toast={toast} clear={() => setToast(null)}/><ConfirmDialog open={!!confirm} documentName={confirm?.name} onClose={() => setConfirm(null)} onConfirm={confirmDelete}/></div> }
-=======
 function DashboardShell() {
   const { user, logout } = useAuth()
   const [active, setActive] = useState('Dashboard')
@@ -607,6 +571,5 @@ function App() {
     </AuthProvider>
   )
 }
->>>>>>> b7c8c13 (feat: revamp login flow and add demo signup verification)
 
 createRoot(document.getElementById('root')).render(<App />)

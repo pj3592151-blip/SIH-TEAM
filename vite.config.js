@@ -1,22 +1,18 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-<<<<<<< HEAD
-export default defineConfig({ plugins: [react()] })
-=======
 export default defineConfig({
   plugins: [react()],
   build: {
     chunkSizeWarningLimit: 1500,
     rollupOptions: {
       output: {
-        manualChunks: {
-          react: ['react', 'react-dom'],
-          motion: ['framer-motion'],
-          icons: ['lucide-react'],
+        manualChunks(id) {
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) return 'react'
+          if (id.includes('node_modules/framer-motion')) return 'motion'
+          if (id.includes('node_modules/lucide-react')) return 'icons'
         },
       },
     },
   },
 })
->>>>>>> b7c8c13 (feat: revamp login flow and add demo signup verification)

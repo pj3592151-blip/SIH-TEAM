@@ -12,11 +12,7 @@ import { useAuth } from '../../context/AuthContext'
 import { authService } from '../../services/authService'
 import { RANKS, getRankAccessLevel, getAccessLevelLabel, getActionTier, ACTION_TIERS, ACCESS_LEVELS } from '../../services/accessControl'
 
-const PUBLIC_LINKS = [
-  { id: 'home', label: 'Home' },
-  { id: 'about', label: 'About' },
-  { id: 'contact', label: 'Contact' },
-]
+const PUBLIC_LINKS = []
 
 const RANK_GROUPS = [
   {
@@ -228,18 +224,20 @@ export function LoginPage() {
           <span>DocGuard</span>
         </button>
 
-        <nav className={`public-nav-links ${mobileNavOpen ? 'open' : ''}`} aria-label="Primary">
-          {PUBLIC_LINKS.map((link) => (
-            <button
-              key={link.id}
-              type="button"
-              className={publicView === link.id ? 'active' : ''}
-              onClick={() => goToView(link.id)}
-            >
-              {link.label}
-            </button>
-          ))}
-        </nav>
+        {PUBLIC_LINKS.length > 0 && (
+          <nav className={`public-nav-links ${mobileNavOpen ? 'open' : ''}`} aria-label="Primary">
+            {PUBLIC_LINKS.map((link) => (
+              <button
+                key={link.id}
+                type="button"
+                className={publicView === link.id ? 'active' : ''}
+                onClick={() => goToView(link.id)}
+              >
+                {link.label}
+              </button>
+            ))}
+          </nav>
+        )}
 
         <div className="public-nav-actions">
           <button
@@ -493,7 +491,7 @@ export function LoginPage() {
               <div className="demo-credentials-banner">
                 <div>
                   <span className="demo-badge">Demo Mode</span>
-                  <small>Testing officer: <code>demo.investigator</code> | <code>Demo@12345</code></small>
+                  <small>Testing officer: <code>pranshu.jain</code> | <code>Pranshu@123</code></small>
                 </div>
                 <button
                   type="button"

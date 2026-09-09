@@ -244,9 +244,9 @@ export const faceAuthenticationService = {
     // /api/v1/auth/biometrics/verify { userId, faceCaptureData }
     //
     // For Phase 1 demo/development mode:
-    // Users with enrolledBiometrics (e.g. demo.investigator, pranshu.kumar, a.singh)
+    // Users with enrolledBiometrics (e.g. pranshu.jain, demo.investigator, a.singh)
     // pass biometric verification when a valid face is detected.
-    const enrolledUsers = ['demo.investigator', 'pranshu.kumar', 'a.singh']
+    const enrolledUsers = ['pranshu.jain', 'demo.investigator', 'a.singh']
     const isEnrolled = enrolledUsers.includes(userId.trim().toLowerCase())
 
     if (!isEnrolled) {

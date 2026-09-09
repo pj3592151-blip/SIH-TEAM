@@ -19,7 +19,7 @@ const STORAGE_KEY = 'docguard_auth_session'
 // Credential lookup table (passwords only — full profile loaded from mockUsers)
 const MOCK_CREDENTIALS = [
   { id: 'demo.investigator', password: 'Demo@12345' },
-  { id: 'pranshu.kumar', password: 'Pranshu@123' },
+  { id: 'pranshu.jain', password: 'Pranshu@123' },
   { id: 'a.singh', password: 'Legal@123' },
   { id: 'r.mehta', password: 'Forensic@123' },
   { id: 'sp.sharma', password: 'District@123' },
@@ -156,9 +156,9 @@ export const authService = {
    */
   getDemoCredentials() {
     return {
-      userId: 'demo.investigator',
-      password: 'Demo@12345',
-      officer: 'Pranshu Kumar (SI – Investigation Officer)',
+      userId: 'pranshu.jain',
+      password: 'Pranshu@123',
+      officer: 'Pranshu Jain (SI – Investigation Officer)',
     }
   },
 }
